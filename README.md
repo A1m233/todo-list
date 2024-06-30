@@ -1,29 +1,29 @@
-# learn-element-plus
+# 项目介绍
+这是本人的第一个前端练手项目。
 
-This template should help get you started developing with Vue 3 in Vite.
+## 技术栈
+使用了 Vue3 + Vite + Element-Plus。
 
-## Recommended IDE Setup
+## 功能
+本项目是一个待办事项列表。
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+其中实现了待办事项的添加、删除、编辑内容、设置完成状态，按照完成状态进行筛选，统计数据，以CSV格式导出全部待办事项，保存上次退出时状态、在重新打开项目时进行加载。
 
-## Customize configuration
+# 项目下载，配置环境以及运行
+首先你需要安装`git`以及`node.js`。
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
+然后你需要在命令行内移动到你想要下载到的目录。如我想要下载到`E:\桌面\Codes\Vue`，那么首先输入`E:`来移动到`E`盘。然后输入：
 ```sh
-npm install
+cd E:\桌面\Codes\Vue
 ```
-
-### Compile and Hot-Reload for Development
-
+然后克隆本代码仓库到本地：
 ```sh
-npm run dev
+git clone https://github.com/A1m233/todo-list
 ```
-
-### Compile and Minify for Production
-
+然后进入项目目录，配置环境，运行项目：
 ```sh
-npm run build
+cd todo-list #进入目录
+npm install #安装依赖
+npm run dev #运行项目
 ```
+之后项目就会进入运行状态，输入`h`即可查看帮助信息。输入`o`在浏览器中运行项目。
