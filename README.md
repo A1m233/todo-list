@@ -22,8 +22,8 @@ git clone https://github.com/A1m233/todo-list
 ```
 然后进入项目目录，配置环境，运行项目：
 ```sh
-cd todo-list #进入目录
-npm install #安装依赖
-npm run dev #运行项目
+cd todo-list
+npm install
+npm run dev
 ```
 之后项目就会进入运行状态，输入`h`即可查看帮助信息。输入`o`在浏览器中运行项目。
