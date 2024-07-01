@@ -18,7 +18,7 @@ App.vue
     const translate = 
     {
         'TodoList': '待办事项',
-        'Statistics': '统计数据'
+        'Statistics': '统计数据',
     };
 
     const todos = ref([]);
@@ -88,6 +88,10 @@ App.vue
 
     onMounted(() =>
     {
+        if (!localStorage.length)
+        {
+            saveToLocalStorage();
+        }
         loadFromLocalStorage();
     });
 </script>

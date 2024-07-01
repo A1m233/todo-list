@@ -24,10 +24,6 @@ Todo.vue
 
     function getNewContent()
     {
-        /*
-        const newContent = prompt('请输入新内容', content.value);
-        content.value = !newContent ? content.value : newContent;
-        */
         ElMessageBox.prompt(
             '请输入新内容',
             '输入框',

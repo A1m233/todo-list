@@ -3,10 +3,9 @@ TodoList.vue
 -->
 <script setup>
     import Todo from './Todo.vue';
-    import {computed, inject, onMounted, reactive, ref, watch, watchEffect} from 'vue';
+    import {computed, inject, reactive} from 'vue';
     import Papa from 'papaparse'; // 导入 papaparse 库
     import {saveAs} from 'file-saver';
-
 
     const translate = 
     {
@@ -95,9 +94,6 @@ TodoList.vue
 
 <template>
     <div>
-        <!-- <h1>
-            {{ translate[filtered] + '待办事项'}}
-        </h1> -->
         <div style="width: 700px; background-color: black;">
             <el-menu
             class="center-row"
@@ -115,7 +111,9 @@ TodoList.vue
                 </el-menu-item>
             </el-menu>
         </div>
-        <div class="center-row" style="padding-bottom: 25px; padding-top: 25px;">
+        <div
+        class="center-row"
+        style="padding-bottom: 25px; padding-top: 25px;">
             <el-input v-model="newTodo" style="width: 240px;" required placeholder="新的待办事项" />
             <el-button type="primary" @click="addNewTodo">
                 <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项

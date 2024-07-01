@@ -2,7 +2,7 @@
 Statistics.vue
 -->
 <script setup>
-    import {onMounted, watch, ref, inject} from 'vue';
+    import {inject} from 'vue';
 
     const completed = inject('completedCount');
     const incompleted = inject('incompletedCount');
