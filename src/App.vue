@@ -88,7 +88,11 @@ App.vue
 
     onMounted(() =>
     {
-        if (!localStorage.length)
+        // 这里如果是第一次启用项目，那么必须先将初始化状态存入localStorage
+        // 否则我们会从localStorage中读取null
+        // 之前使用!localStorage.length来判断
+        // 然而第一次使用时，localStorage却并不是空的
+        if (!localStorage.getItem('todos') || !localStorage.getItem('id')) 
         {
             saveToLocalStorage();
         }
