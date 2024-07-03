@@ -28,7 +28,7 @@ App.vue
     const completedCount = computed(() =>
     {
         if (!todos.value || !todos.value.length)return 0;
-        return todos.value.reduce((accumulator, item, index, array) =>
+        return todos.value.reduce((accumulator, item) =>
         {
             accumulator += +(item.state === true);
             return accumulator;
@@ -37,7 +37,7 @@ App.vue
     const incompletedCount = computed(() =>
     {
         if (!todos.value || !todos.value.length)return 0;
-        return todos.value.reduce((accumulator, item, index, array) =>
+        return todos.value.reduce((accumulator, item) =>
         {
             accumulator += +(item.state !== true);
             return accumulator;
@@ -120,7 +120,7 @@ App.vue
     <div class="center-col">
         <el-affix offset="0">
             <el-button type="warning" @click="clearLocalStorage">
-                清除此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
+                <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
             </el-button>
         </el-affix>
         <el-affix style="width: 100%;">

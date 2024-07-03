@@ -58,7 +58,6 @@ Todo.vue
             v-model="state"
             :label="content"
             size="large"></el-checkbox>
-            <!-- <slot></slot> -->
         </div>
         <div>
             <el-button-group>

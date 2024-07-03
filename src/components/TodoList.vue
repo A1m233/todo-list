@@ -3,16 +3,9 @@ TodoList.vue
 -->
 <script setup>
     import Todo from './Todo.vue';
-    import {computed, inject, reactive} from 'vue';
+    import {computed, inject} from 'vue';
     import Papa from 'papaparse'; // 导入 papaparse 库
     import {saveAs} from 'file-saver';
-
-    const translate = 
-    {
-        'all': '全部',
-        'completed': '已完成',
-        'incompleted': '未完成',
-    };
 
     const id = inject('id');
     const newTodo = inject('newTodo');
@@ -41,7 +34,7 @@ TodoList.vue
     function updateContent(index, newContent) 
     {
         // 使用解构赋值创建新的对象，以便 Vue 可以检测到变化
-        todos.value = todos.value.map((todo, i) =>
+        todos.value = todos.value.map(todo =>
         {
             return todo.id === index ? 
             {
@@ -53,7 +46,7 @@ TodoList.vue
     }
     function updateState(index, newState)
     {
-        todos.value = reactive(todos.value.map((todo, i) =>
+        todos.value = todos.value.map(todo =>
         {
             return todo.id === index ? 
             {
@@ -61,11 +54,11 @@ TodoList.vue
                 state: newState, 
             }
             : todo;
-        }));
+        });
     }
     function deleteTodo(index)
     {
-        todos.value = todos.value.filter((todo, i) => todo.id !== index);
+        todos.value = todos.value.filter(todo => todo.id !== index);
         console.log(todos);
     }
     // 导出为 CSV 文件，解决中文乱码问题
@@ -126,7 +119,7 @@ TodoList.vue
         </div>
         <div>
             <ul>
-                <li v-for="(todo, index) in filteredTodos" :key="todo.id">
+                <li v-for="todo in filteredTodos" :key="todo.id">
                     <KeepAlive>
                         <component :is="Todo"
                             @update-state="newState => updateState(todo.id, newState)"
