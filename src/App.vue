@@ -6,7 +6,6 @@ App.vue
     import TodoList from './components/TodoList.vue';
     import Statistics from './components/Statistics.vue';
 
-    const currView = ref('TodoList');
     const viewList = 
     {
         // 实际上传入的是对象
@@ -21,6 +20,7 @@ App.vue
         'Statistics': '统计数据',
     };
 
+    const currView = ref('TodoList');
     const todos = ref([]);
     const newTodo = ref('');
     const id = ref(0);
@@ -66,12 +66,21 @@ App.vue
     }
     function loadFromLocalStorage()
     {
-        const tmp = localStorage.getItem('currView');
-        if (tmp)currView.value = JSON.parse(tmp);
-        todos.value = JSON.parse(localStorage.getItem('todos'));
-        id.value = JSON.parse(localStorage.getItem('id'));
-        newTodo.value = JSON.parse(localStorage.getItem('newTodo'));
-        filtered.value = JSON.parse(localStorage.getItem('filtered'));
+        const tmpCurrView = localStorage.getItem('currView');
+        currView.value = tmpCurrView ? JSON.parse(tmpCurrView) : 'TodoList';
+
+        const tmpTodos = localStorage.getItem('todos');
+        todos.value = tmpTodos ? JSON.parse(tmpTodos) : [];
+
+        const tmpId = localStorage.getItem('id');
+        id.value = tmpId ? JSON.parse(tmpId) : 0;
+
+        const tmpNewTodo = localStorage.getItem('newTodo');
+        newTodo.value = tmpNewTodo ? JSON.parse(tmpNewTodo) : '';
+
+        const tmpFiltered = localStorage.getItem('filtered');
+        filtered.value = tmpFiltered ? JSON.parse(tmpFiltered) : 'all';
+
         console.log(`App load from localStorage`);
         console.log(`currView: ${currView.value}`);
         console.log(`todos: ${todos.value}`);
@@ -85,6 +94,14 @@ App.vue
     {
         currView.value = key;
     }
+    function clearLocalStorage()
+    {
+        currView.value = 'TodoList';
+        todos.value = [];
+        newTodo.value = '';
+        id.value = 0;
+        filtered.value = 'all';
+    }
 
     onMounted(() =>
     {
@@ -92,16 +109,20 @@ App.vue
         // 否则我们会从localStorage中读取null
         // 之前使用!localStorage.length来判断
         // 然而第一次使用时，localStorage却并不是空的
-        if (!localStorage.getItem('todos') || !localStorage.getItem('id')) 
-        {
-            saveToLocalStorage();
-        }
+
+        // 貌似还是存在一个我不清楚的问题
+        // 所以直接改成在loadFromLocalStorage()中判断
         loadFromLocalStorage();
     });
 </script>
 
 <template>
     <div class="center-col">
+        <el-affix offset="0">
+            <el-button type="warning" @click="clearLocalStorage">
+                清除此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
+            </el-button>
+        </el-affix>
         <el-affix style="width: 100%;">
             <el-menu
             class="center-row"
@@ -109,14 +130,14 @@ App.vue
             :default-active="currView"
             mode="horizontal"
             @select="handleSelect">
-            <el-menu-item v-for="(viewComponent, viewName) in viewList"
-            :key="viewName"
-            :index="viewName"
-            @click="currView = viewName">
-                <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
-                <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
-                {{ translate[viewName] }}
-            </el-menu-item>
+                <el-menu-item v-for="(viewComponent, viewName) in viewList"
+                :key="viewName"
+                :index="viewName"
+                @click="currView = viewName">
+                    <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
+                    <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
+                    {{ translate[viewName] }}
+                </el-menu-item>
             </el-menu>
         </el-affix>
         <component
