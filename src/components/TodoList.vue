@@ -43,7 +43,22 @@ TodoList.vue
             </el-button>
         </div>
         <div>
-            <ul>
+            <VueDraggable ref="el" v-model="filteredTodos">
+                <div v-for="(todo, index) in filteredTodos" :key="index">
+                    <KeepAlive>
+                        <component
+                        :is="Todo"
+                        @update-state="newState => updateState(todo.id, newState)"
+                        @update-content="newContent => updateContent(todo.id, newContent)"
+                        @delete-todo="deleteTodo(todo.id)"
+                        :content="todo.content"
+                        :state="todo.state">
+                            {{todo.content}}
+                        </component>
+                    </KeepAlive>
+                </div>
+            </VueDraggable>
+            <!-- <ul>
                 <li v-for="todo in filteredTodos" :key="todo.id">
                     <KeepAlive>
                         <component
@@ -57,7 +72,7 @@ TodoList.vue
                         </component>
                     </KeepAlive>
                 </li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 </template>
@@ -67,6 +82,7 @@ TodoList.vue
     import {computed, inject} from 'vue';
     import Papa from 'papaparse';
     import {saveAs} from 'file-saver';
+    import { VueDraggable } from 'vue-draggable-plus';
 
     const id = inject('id');
     const newTodo = inject('newTodo');
