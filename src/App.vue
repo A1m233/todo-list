@@ -1,5 +1,6 @@
 <!--
 App.vue
+处理tab页切换和页面状态保存与加载逻辑
 -->
 <script setup>
     import {onMounted, provide, ref, watch, computed} from 'vue';
@@ -8,8 +9,8 @@ App.vue
 
     const viewList = 
     {
-        // 实际上传入的是对象
-        // 这里可以直接放入是因为组件
+        // 实际上传入的是键值对
+        // 这里可以直接放入
         // 是因为属性名和变量名相同
         TodoList,
         Statistics,
@@ -25,6 +26,7 @@ App.vue
     const newTodo = ref('');
     const id = ref(0);
     const filtered = ref('all');
+
     const completedCount = computed(() =>
     {
         if (!todos.value || !todos.value.length)return 0;
@@ -43,6 +45,7 @@ App.vue
             return accumulator;
         }, 0);
     });
+
     provide('todos', todos);
     provide('newTodo', newTodo);
     provide('id', id);
@@ -90,10 +93,6 @@ App.vue
         console.log(`completedCount: ${completedCount.value}`);
         console.log(`incompletedCount: ${incompletedCount.value}`);
     }
-    function handleSelect(key)
-    {
-        currView.value = key;
-    }
     function clearLocalStorage()
     {
         currView.value = 'TodoList';
@@ -101,6 +100,10 @@ App.vue
         newTodo.value = '';
         id.value = 0;
         filtered.value = 'all';
+    }
+    function handleSelect(key)
+    {
+        currView.value = key;
     }
 
     onMounted(() =>

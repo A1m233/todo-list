@@ -4,7 +4,7 @@ TodoList.vue
 <script setup>
     import Todo from './Todo.vue';
     import {computed, inject} from 'vue';
-    import Papa from 'papaparse'; // 导入 papaparse 库
+    import Papa from 'papaparse';
     import {saveAs} from 'file-saver';
 
     const id = inject('id');
@@ -19,6 +19,23 @@ TodoList.vue
         return todos.value;
     });
 
+    // 导出为 CSV 文件，解决中文乱码问题
+    function exportToCSV() 
+    {
+        const data = todos.value.map(todo => (
+        {
+            '状态': todo.state ? '已完成' : '未完成',
+            '内容': todo.content,
+        }));
+
+        const csv = Papa.unparse(data);
+        // 添加 UTF-8 BOM 头
+        const BOM = '\uFEFF';
+        const csvWithBOM = BOM + csv;
+
+        const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
+        saveAs(blob, 'todos.csv');
+    }
     function addNewTodo()
     {
         console.log(todos);
@@ -33,7 +50,6 @@ TodoList.vue
     }
     function updateContent(index, newContent) 
     {
-        // 使用解构赋值创建新的对象，以便 Vue 可以检测到变化
         todos.value = todos.value.map(todo =>
         {
             return todo.id === index ? 
@@ -61,28 +77,10 @@ TodoList.vue
         todos.value = todos.value.filter(todo => todo.id !== index);
         console.log(todos);
     }
-    // 导出为 CSV 文件，解决中文乱码问题
-    function exportToCSV() 
-    {
-        const data = todos.value.map(todo => (
-        {
-            '状态': todo.state ? '已完成' : '未完成',
-            '内容': todo.content,
-        }));
-
-        const csv = Papa.unparse(data);
-        // 添加 UTF-8 BOM 头
-        const BOM = '\uFEFF';
-        const csvWithBOM = BOM + csv;
-
-        const blob = new Blob([csvWithBOM], { type: 'text/csv;charset=utf-8;' });
-        saveAs(blob, 'todos.csv');
-    }
     function handleSelect(index)
     {
         filtered.value = index;
     }
-
 </script>
 
 <template>
@@ -121,12 +119,13 @@ TodoList.vue
             <ul>
                 <li v-for="todo in filteredTodos" :key="todo.id">
                     <KeepAlive>
-                        <component :is="Todo"
-                            @update-state="newState => updateState(todo.id, newState)"
-                            @update-content="newContent => updateContent(todo.id, newContent)"
-                            @delete-todo="deleteTodo(todo.id)"
-                            :content="todo.content"
-                            :state="todo.state">
+                        <component
+                        :is="Todo"
+                        @update-state="newState => updateState(todo.id, newState)"
+                        @update-content="newContent => updateContent(todo.id, newContent)"
+                        @delete-todo="deleteTodo(todo.id)"
+                        :content="todo.content"
+                        :state="todo.state">
                             {{todo.content}}
                         </component>
                     </KeepAlive>

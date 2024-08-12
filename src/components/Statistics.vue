@@ -1,5 +1,6 @@
 <!--
 Statistics.vue
+展示统计数据
 -->
 <script setup>
     import {inject} from 'vue';
@@ -43,8 +44,5 @@ Statistics.vue
                 </template>
             </el-statistic>
         </el-card>
-        <!-- <p>已完成的待办事项总数：{{ completed }}</p>
-        <p>未完成的待办事项总数：{{ incompleted }}</p>
-        <p>待办事项总数：{{ completed + incompleted }}</p> -->
     </div>
 </template>
