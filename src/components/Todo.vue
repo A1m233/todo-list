@@ -7,7 +7,7 @@ Todo.vue
         <el-divider />
         <div>
             <el-checkbox
-            v-model="state"
+            v-model="currState"
             :label="content"
             size="large"></el-checkbox>
         </div>
@@ -29,25 +29,25 @@ Todo.vue
 </template>
 
 <script setup>
-    import {ref, watch} from 'vue';
+    import {ref, watch, computed} from 'vue';
     import {Delete, Edit} from '@element-plus/icons-vue';
     import {ElMessage, ElMessageBox} from 'element-plus';
 
     const emit = defineEmits(['update-state', 'update-content', 'delete-todo']);
     const props = defineProps(['content' ,'state']);
-    const content = ref(props['content']);
-    const state = ref(props['state']);
-    
-    watch(content, newContent =>
-    {
-        emit('update-content', newContent);
-    });
-    watch(state, newState =>
-    {
-        console.log('success');
-        emit('update-state', newState);
-    });
 
+    let currState = computed(
+    {
+        get()
+        {
+            return props['state'];
+        },
+        set(newState)
+        {
+            emit('update-state', newState);
+        },
+    });
+    let currContent = props['content'];
     function getNewContent()
     {
         ElMessageBox.prompt(
@@ -56,7 +56,7 @@ Todo.vue
             {
                 confirmButtonText: '确认',
                 cancelButtonText: '取消',
-                inputValue: content.value,
+                inputValue: currContent,
             }
         ).then(({value}) =>
         {
@@ -67,7 +67,8 @@ Todo.vue
             else
             {
                 ElMessage.success("编辑成功");
-                content.value = value;
+                emit('update-content', value);
+                currContent = value;
             }
         }).catch(() =>
         {

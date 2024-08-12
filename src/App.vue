@@ -5,7 +5,7 @@ App.vue
 <template>
     <div class="center-col">
         <el-affix offset="0">
-            <el-button type="warning" @click="clearLocalStorage">
+            <el-button type="danger" @click="clearLocalStorage">
                 <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
             </el-button>
         </el-affix>
@@ -62,7 +62,7 @@ App.vue
         if (!todos.value || !todos.value.length)return 0;
         return todos.value.reduce((accumulator, item) =>
         {
-            accumulator += +(item.state === true);
+            accumulator += +(item.value.state === true);
             return accumulator;
         }, 0);
     });
@@ -71,15 +71,18 @@ App.vue
         if (!todos.value || !todos.value.length)return 0;
         return todos.value.reduce((accumulator, item) =>
         {
-            accumulator += +(item.state !== true);
+            accumulator += +(item.value.state !== true);
             return accumulator;
         }, 0);
     });
 
     provide('todos', todos);
+    provide('updateTodos', updateTodos);
     provide('newTodo', newTodo);
+    provide('updateNewTodo', updateNewTodo);
     provide('id', id);
     provide('filtered', filtered);
+    provide('updateFiltered', updateFiltered);
     provide('completedCount', completedCount);
     provide('incompletedCount', incompletedCount);
 
@@ -89,10 +92,22 @@ App.vue
     watch(newTodo, saveToLocalStorage);
     watch(filtered, saveToLocalStorage);
 
+    function updateTodos(newValue)
+    {
+        todos.value = newValue;
+    }
+    function updateFiltered(newValue)
+    {
+        filtered.value = newValue;
+    }
+    function updateNewTodo(newValue)
+    {
+        newTodo.value = newValue;
+    }
     function saveToLocalStorage()
     {
         localStorage.setItem('currView', JSON.stringify(currView.value));
-        localStorage.setItem('todos', JSON.stringify(todos.value));
+        localStorage.setItem('todos', JSON.stringify(todos.value.map(item => item.value)));
         localStorage.setItem('id', JSON.stringify(id.value));
         localStorage.setItem('newTodo', JSON.stringify(newTodo.value));
         localStorage.setItem('filtered', JSON.stringify(filtered.value));
@@ -104,6 +119,7 @@ App.vue
 
         const tmpTodos = localStorage.getItem('todos');
         todos.value = tmpTodos ? JSON.parse(tmpTodos) : [];
+        todos.value = todos.value.map(item => ref(item));
 
         const tmpId = localStorage.getItem('id');
         id.value = tmpId ? JSON.parse(tmpId) : 0;

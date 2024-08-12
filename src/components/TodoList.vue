@@ -23,12 +23,13 @@ TodoList.vue
         <el-form
         class="center-row"
         style="padding-bottom: 25px; padding-top: 25px;"
-        @submit="addNewTodo">
+        @submit.prevent="addNewTodo">
             <el-form-item>
                 <el-input
                 v-model="newTodo"
                 style="width: 240px;"
                 required placeholder="新的待办事项"
+                :ref="inputRef"
                 clearable />
             </el-form-item>
             <el-form-item>
@@ -43,56 +44,42 @@ TodoList.vue
             </el-button>
         </div>
         <div>
-            <VueDraggable ref="el" v-model="filteredTodos">
+            <VueDraggable v-model="filteredTodos">
                 <div v-for="(todo, index) in filteredTodos" :key="index">
-                    <KeepAlive>
-                        <component
-                        :is="Todo"
-                        @update-state="newState => updateState(todo.id, newState)"
-                        @update-content="newContent => updateContent(todo.id, newContent)"
-                        @delete-todo="deleteTodo(todo.id)"
-                        :content="todo.content"
-                        :state="todo.state">
-                            {{todo.content}}
-                        </component>
-                    </KeepAlive>
+                    <component
+                    :is="Todo"
+                    @update-state="newState => updateState(todo.value.id, newState)"
+                    @update-content="newContent => updateContent(todo.value.id, newContent)"
+                    @delete-todo="deleteTodo(todo.value.id)"
+                    :content="todo.value.content"
+                    :state="todo.value.state" />
                 </div>
             </VueDraggable>
-            <!-- <ul>
-                <li v-for="todo in filteredTodos" :key="todo.id">
-                    <KeepAlive>
-                        <component
-                        :is="Todo"
-                        @update-state="newState => updateState(todo.id, newState)"
-                        @update-content="newContent => updateContent(todo.id, newContent)"
-                        @delete-todo="deleteTodo(todo.id)"
-                        :content="todo.content"
-                        :state="todo.state">
-                            {{todo.content}}
-                        </component>
-                    </KeepAlive>
-                </li>
-            </ul> -->
         </div>
     </div>
 </template>
 
 <script setup>
     import Todo from './Todo.vue';
-    import {computed, inject} from 'vue';
+    import {computed, inject, ref} from 'vue';
     import Papa from 'papaparse';
     import {saveAs} from 'file-saver';
     import { VueDraggable } from 'vue-draggable-plus';
 
     const id = inject('id');
     const newTodo = inject('newTodo');
-    const todos = inject('todos');
+    const updateNewTodo = inject('updateNewTodo');
+    let todos = inject('todos');
+    const updateTodos = inject('updateTodos');
     const filtered = inject('filtered');
+    const updateFiltered = inject('updateFiltered');
+
+    const inputRef = ref(null);
 
     const filteredTodos = computed(() =>
     {
-        if (filtered.value === 'completed')return todos.value.filter(todo => todo.state === true);
-        else if (filtered.value === 'incompleted')return todos.value.filter(todo => todo.state !== true);
+        if (filtered.value === 'completed')return todos.value.filter(todo => todo.value.state === true);
+        else if (filtered.value === 'incompleted')return todos.value.filter(todo => todo.value.state !== true);
         return todos.value;
     });
 
@@ -101,8 +88,8 @@ TodoList.vue
     {
         const data = todos.value.map(todo => (
         {
-            '状态': todo.state ? '已完成' : '未完成',
-            '内容': todo.content,
+            '状态': todo.value.state ? '已完成' : '未完成',
+            '内容': todo.value.content,
         }));
 
         const csv = Papa.unparse(data);
@@ -115,47 +102,52 @@ TodoList.vue
     }
     function addNewTodo()
     {
-        console.log(todos);
-        todos.value.push(
-        {
-            id: id.value++,
-            type: Todo,
-            content: newTodo.value,
-            state: false, 
-        });
-        newTodo.value = '';
+        updateTodos(
+        [
+            ref(
+            {
+                id: id.value++,
+                type: Todo,
+                content: ref(newTodo.value),
+                state: ref(false),
+            }),
+            ...(todos.value),
+        ]);
+        updateNewTodo('');
+        inputRef.value.focus();
     }
     function updateContent(index, newContent) 
     {
-        todos.value = todos.value.map(todo =>
+        updateTodos(todos.value.map(todo =>
         {
-            return todo.id === index ? 
+            return todo.value.id === index ? 
+            ref(
             {
-                ...todo,
-                content: newContent,
-            } 
+                ...(todo.value),
+                content: ref(newContent),
+            }) 
             : todo;
-        });
+        }));
     }
     function updateState(index, newState)
     {
-        todos.value = todos.value.map(todo =>
+        updateTodos(todos.value.map(todo =>
         {
-            return todo.id === index ? 
+            return todo.value.id === index ? 
+            ref(
             {
-                ...todo,
-                state: newState, 
-            }
+                ...(todo.value),
+                state: ref(newState), 
+            })
             : todo;
-        });
+        }));
     }
     function deleteTodo(index)
     {
-        todos.value = todos.value.filter(todo => todo.id !== index);
-        console.log(todos);
+        updateTodos(todos.value.filter(todo => todo.value.id !== index));
     }
     function handleSelect(index)
     {
-        filtered.value = index;
+        updateFiltered(index);
     }
 </script>
