@@ -2,6 +2,36 @@
 App.vue
 处理tab页切换和页面状态保存与加载逻辑
 -->
+<template>
+    <div class="center-col">
+        <el-affix offset="0">
+            <el-button type="warning" @click="clearLocalStorage">
+                <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
+            </el-button>
+        </el-affix>
+        <el-affix style="width: 100%;">
+            <el-menu
+            class="center-row"
+            style="min-width: 100%"
+            :default-active="currView"
+            mode="horizontal"
+            @select="handleSelect">
+                <el-menu-item v-for="(viewComponent, viewName) in viewList"
+                :key="viewName"
+                :index="viewName"
+                @click="currView = viewName">
+                    <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
+                    <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
+                    {{ translate[viewName] }}
+                </el-menu-item>
+            </el-menu>
+        </el-affix>
+        <component
+        :is="viewList[currView]"/>
+        <el-backtop :right="100" :bottom="100" />
+    </div>
+</template>
+
 <script setup>
     import {onMounted, provide, ref, watch, computed} from 'vue';
     import TodoList from './components/TodoList.vue';
@@ -118,33 +148,3 @@ App.vue
         loadFromLocalStorage();
     });
 </script>
-
-<template>
-    <div class="center-col">
-        <el-affix offset="0">
-            <el-button type="warning" @click="clearLocalStorage">
-                <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
-            </el-button>
-        </el-affix>
-        <el-affix style="width: 100%;">
-            <el-menu
-            class="center-row"
-            style="min-width: 100%"
-            :default-active="currView"
-            mode="horizontal"
-            @select="handleSelect">
-                <el-menu-item v-for="(viewComponent, viewName) in viewList"
-                :key="viewName"
-                :index="viewName"
-                @click="currView = viewName">
-                    <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
-                    <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
-                    {{ translate[viewName] }}
-                </el-menu-item>
-            </el-menu>
-        </el-affix>
-        <component
-        :is="viewList[currView]"/>
-        <el-backtop :right="100" :bottom="100" />
-    </div>
-</template>

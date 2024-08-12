@@ -1,6 +1,67 @@
 <!--
 TodoList.vue
 -->
+<template>
+    <div>
+        <div style="width: 700px; background-color: black;">
+            <el-menu
+            class="center-row"
+            :default-active="filtered"
+            mode="horizontal"
+            @select="handleSelect">
+                <el-menu-item index="all">
+                    <el-icon><Filter /></el-icon>&nbsp;显示全部待办事项
+                </el-menu-item>
+                <el-menu-item index="incompleted">
+                    <el-icon><Filter /></el-icon>&nbsp;显示未完成待办事项
+                </el-menu-item>
+                <el-menu-item index="completed">
+                    <el-icon><Filter /></el-icon>&nbsp;显示已完成待办事项
+                </el-menu-item>
+            </el-menu>
+        </div>
+        <el-form
+        class="center-row"
+        style="padding-bottom: 25px; padding-top: 25px;"
+        @submit="addNewTodo">
+            <el-form-item>
+                <el-input
+                v-model="newTodo"
+                style="width: 240px;"
+                required placeholder="新的待办事项"
+                clearable />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary">
+                    <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项
+                </el-button>
+            </el-form-item>
+        </el-form>
+        <div class="center-row">
+            <el-button type="primary" @click="exportToCSV">
+                <el-icon><Printer /></el-icon>&nbsp;导出全部待办事项，以CSV格式
+            </el-button>
+        </div>
+        <div>
+            <ul>
+                <li v-for="todo in filteredTodos" :key="todo.id">
+                    <KeepAlive>
+                        <component
+                        :is="Todo"
+                        @update-state="newState => updateState(todo.id, newState)"
+                        @update-content="newContent => updateContent(todo.id, newContent)"
+                        @delete-todo="deleteTodo(todo.id)"
+                        :content="todo.content"
+                        :state="todo.state">
+                            {{todo.content}}
+                        </component>
+                    </KeepAlive>
+                </li>
+            </ul>
+        </div>
+    </div>
+</template>
+
 <script setup>
     import Todo from './Todo.vue';
     import {computed, inject} from 'vue';
@@ -82,55 +143,3 @@ TodoList.vue
         filtered.value = index;
     }
 </script>
-
-<template>
-    <div>
-        <div style="width: 700px; background-color: black;">
-            <el-menu
-            class="center-row"
-            :default-active="filtered"
-            mode="horizontal"
-            @select="handleSelect">
-                <el-menu-item index="all">
-                    <el-icon><Filter /></el-icon>&nbsp;显示全部待办事项
-                </el-menu-item>
-                <el-menu-item index="incompleted">
-                    <el-icon><Filter /></el-icon>&nbsp;显示未完成待办事项
-                </el-menu-item>
-                <el-menu-item index="completed">
-                    <el-icon><Filter /></el-icon>&nbsp;显示已完成待办事项
-                </el-menu-item>
-            </el-menu>
-        </div>
-        <div
-        class="center-row"
-        style="padding-bottom: 25px; padding-top: 25px;">
-            <el-input v-model="newTodo" style="width: 240px;" required placeholder="新的待办事项" />
-            <el-button type="primary" @click="addNewTodo">
-                <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项
-            </el-button>
-        </div>
-        <div class="center-row">
-            <el-button type="primary" @click="exportToCSV">
-                <el-icon><Printer /></el-icon>&nbsp;导出全部待办事项，以CSV格式
-            </el-button>
-        </div>
-        <div>
-            <ul>
-                <li v-for="todo in filteredTodos" :key="todo.id">
-                    <KeepAlive>
-                        <component
-                        :is="Todo"
-                        @update-state="newState => updateState(todo.id, newState)"
-                        @update-content="newContent => updateContent(todo.id, newContent)"
-                        @delete-todo="deleteTodo(todo.id)"
-                        :content="todo.content"
-                        :state="todo.state">
-                            {{todo.content}}
-                        </component>
-                    </KeepAlive>
-                </li>
-            </ul>
-        </div>
-    </div>
-</template>

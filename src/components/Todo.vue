@@ -2,6 +2,32 @@
 Todo.vue
 处理单个待办事项的逻辑
 -->
+<template>
+    <div>
+        <el-divider />
+        <div>
+            <el-checkbox
+            v-model="state"
+            :label="content"
+            size="large"></el-checkbox>
+        </div>
+        <div>
+            <el-button-group>
+                <el-button type="primary" :icon="Edit" @click="getNewContent">编辑内容</el-button>
+                <el-popconfirm
+                title="是否删除该待办事项？"
+                @confirm="emit('delete-todo')"
+                :confirmButtonText="'是的'"
+                :cancelButtonText="'取消'">
+                    <template #reference>
+                        <el-button type="primary" :icon="Delete">删除该待办事项</el-button>
+                    </template>
+                </el-popconfirm>
+            </el-button-group>
+        </div>
+    </div>
+</template>
+
 <script setup>
     import {ref, watch} from 'vue';
     import {Delete, Edit} from '@element-plus/icons-vue';
@@ -49,29 +75,3 @@ Todo.vue
         });
     }
 </script>
-
-<template>
-    <div>
-        <el-divider />
-        <div>
-            <el-checkbox
-            v-model="state"
-            :label="content"
-            size="large"></el-checkbox>
-        </div>
-        <div>
-            <el-button-group>
-                <el-button type="primary" :icon="Edit" @click="getNewContent">编辑内容</el-button>
-                <el-popconfirm
-                title="是否删除该待办事项？"
-                @confirm="emit('delete-todo')"
-                :confirmButtonText="'是的'"
-                :cancelButtonText="'取消'">
-                    <template #reference>
-                        <el-button type="primary" :icon="Delete">删除该待办事项</el-button>
-                    </template>
-                </el-popconfirm>
-            </el-button-group>
-        </div>
-    </div>
-</template>
