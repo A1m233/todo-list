@@ -32,7 +32,7 @@ TodoList.vue
                 clearable />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">
+                <el-button type="primary" native-type="submit">
                     <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项
                 </el-button>
             </el-form-item>
