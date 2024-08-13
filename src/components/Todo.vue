@@ -47,7 +47,8 @@ Todo.vue
             emit('update-state', newState);
         },
     });
-    let currContent = props['content'];
+    let inputContent = computed(() => ref(props['content']));
+    //watch(props['content'], () => inputContent.value = props['content']);
     function getNewContent()
     {
         ElMessageBox.prompt(
@@ -56,7 +57,7 @@ Todo.vue
             {
                 confirmButtonText: '确认',
                 cancelButtonText: '取消',
-                inputValue: currContent,
+                inputValue: inputContent.value,
             }
         ).then(({value}) =>
         {
@@ -68,7 +69,7 @@ Todo.vue
             {
                 ElMessage.success("编辑成功");
                 emit('update-content', value);
-                currContent = value;
+                //currContent = value;
             }
         }).catch(() =>
         {

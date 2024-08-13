@@ -30,7 +30,6 @@ TodoList.vue
                     v-model="newTodo"
                     style="width: 240px;"
                     required placeholder="新的待办事项"
-                    :ref="inputRef"
                     clearable />
                 </el-form-item>
                 <el-form-item>
@@ -114,7 +113,6 @@ TodoList.vue
             ...(todos.value),
         ]);
         updateNewTodo('');
-        inputRef.value.focus();
     }
     function updateContent(index, newContent) 
     {
