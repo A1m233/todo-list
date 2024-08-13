@@ -127,7 +127,7 @@ App.vue
 
         const tmpTodos = localStorage.getItem('todos');
         todos.value = tmpTodos ? JSON.parse(tmpTodos) : [];
-        todos.value = todos.value.map(todo => ref(todo));
+        todos.value = todos.value?.map(todo => ref(todo));
 
         const tmpId = localStorage.getItem('id');
         id.value = tmpId ? JSON.parse(tmpId) : 0;
@@ -150,7 +150,7 @@ App.vue
     function clearLocalStorage()
     {
         currView.value = 'TodoList';
-        todos.value = [];
+        todos.value = ref([]);
         newTodo.value = '';
         id.value = 0;
         filtered.value = 'all';
