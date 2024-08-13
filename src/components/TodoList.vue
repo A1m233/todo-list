@@ -20,25 +20,25 @@ TodoList.vue
                 </el-menu-item>
             </el-menu>
         </div>
-        <el-form
-        class="center-row"
-        style="padding-bottom: 25px; padding-top: 25px;"
-        @submit.prevent="addNewTodo">
-            <el-form-item>
-                <el-input
-                v-model="newTodo"
-                style="width: 240px;"
-                required placeholder="新的待办事项"
-                :ref="inputRef"
-                clearable />
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" native-type="submit">
-                    <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项
-                </el-button>
-            </el-form-item>
-        </el-form>
-        <div class="center-row">
+        <div class="center-col">
+            <el-form
+            class="center-row"
+            style="padding-bottom: 25px; padding-top: 25px;"
+            @submit.prevent="addNewTodo">
+                <el-form-item>
+                    <el-input
+                    v-model="newTodo"
+                    style="width: 240px;"
+                    required placeholder="新的待办事项"
+                    :ref="inputRef"
+                    clearable />
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" native-type="submit">
+                        <el-icon><Plus /></el-icon>&nbsp;添加新的待办事项
+                    </el-button>
+                </el-form-item>
+            </el-form>
             <el-button type="primary" @click="exportToCSV">
                 <el-icon><Printer /></el-icon>&nbsp;导出全部待办事项，以CSV格式
             </el-button>

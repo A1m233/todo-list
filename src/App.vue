@@ -5,9 +5,17 @@ App.vue
 <template>
     <div class="center-col">
         <el-affix offset="0">
-            <el-button type="danger" @click="clearLocalStorage">
-                <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表。当此待办事项列表出现问题时，可以尝试点击此按钮进行修复
-            </el-button>
+            <el-popconfirm
+            title="是否清除此待办事项列表？"
+            @confirm="() => clearLocalStorage()"
+            :confirmButtonText="'是的'"
+            :cancelButtonText="'取消'">
+                <template #reference>
+                    <el-button type="danger">
+                        <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表（当此待办事项列表异常运作时，也可尝试点击此按钮进行修复）
+                    </el-button>
+                </template>
+            </el-popconfirm>
         </el-affix>
         <el-affix style="width: 100%;">
             <el-menu
