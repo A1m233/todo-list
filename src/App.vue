@@ -60,18 +60,18 @@ App.vue
     const completedCount = computed(() =>
     {
         if (!todos.value || !todos.value.length)return 0;
-        return todos.value.reduce((accumulator, item) =>
+        return todos.value.reduce((accumulator, todo) =>
         {
-            accumulator += +(item.value.state === true);
+            accumulator += +(todo.value.state === true);
             return accumulator;
         }, 0);
     });
     const incompletedCount = computed(() =>
     {
         if (!todos.value || !todos.value.length)return 0;
-        return todos.value.reduce((accumulator, item) =>
+        return todos.value.reduce((accumulator, todo) =>
         {
-            accumulator += +(item.value.state !== true);
+            accumulator += +(todo.value.state !== true);
             return accumulator;
         }, 0);
     });
@@ -107,7 +107,7 @@ App.vue
     function saveToLocalStorage()
     {
         localStorage.setItem('currView', JSON.stringify(currView.value));
-        localStorage.setItem('todos', JSON.stringify(todos.value.map(item => item.value)));
+        localStorage.setItem('todos', JSON.stringify(todos.value.map(todo => todo.value)));
         localStorage.setItem('id', JSON.stringify(id.value));
         localStorage.setItem('newTodo', JSON.stringify(newTodo.value));
         localStorage.setItem('filtered', JSON.stringify(filtered.value));
@@ -119,7 +119,7 @@ App.vue
 
         const tmpTodos = localStorage.getItem('todos');
         todos.value = tmpTodos ? JSON.parse(tmpTodos) : [];
-        todos.value = todos.value.map(item => ref(item));
+        todos.value = todos.value.map(todo => ref(todo));
 
         const tmpId = localStorage.getItem('id');
         id.value = tmpId ? JSON.parse(tmpId) : 0;

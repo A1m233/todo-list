@@ -44,7 +44,7 @@ TodoList.vue
             </el-button>
         </div>
         <div>
-            <VueDraggable v-model="filteredTodos">
+            <VueDraggable v-model="todos">
                 <div v-for="(todo, index) in filteredTodos" :key="index">
                     <component
                     :is="Todo"
