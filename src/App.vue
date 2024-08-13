@@ -150,7 +150,7 @@ App.vue
     function clearLocalStorage()
     {
         currView.value = 'TodoList';
-        todos.value = ref([]);
+        todos.value = [];
         newTodo.value = '';
         id.value = 0;
         filtered.value = 'all';
