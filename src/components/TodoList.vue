@@ -3,9 +3,9 @@ TodoList.vue
 -->
 <template>
     <div>
-        <div style="width: 700px; background-color: black;">
+        <div>
             <el-menu
-            class="center-row"
+            :ellipsis="false"
             :default-active="filtered"
             mode="horizontal"
             @select="handleSelect">
