@@ -129,7 +129,7 @@ TodoList.vue
     }
     function updateState(index, newState)
     {
-        updateTodos(todos.value.map(todo =>
+        let tmp = todos.value.map(todo =>
         {
             return todo.value.id === index ? 
             ref(
@@ -138,7 +138,12 @@ TodoList.vue
                 state: ref(newState), 
             })
             : todo;
-        }));
+        });
+        updateTodos(
+        [
+            ...tmp.filter(todo => todo.value.state === false),
+            ...tmp.filter(todo => todo.value.state === true),
+        ]);
     }
     function deleteTodo(index)
     {
