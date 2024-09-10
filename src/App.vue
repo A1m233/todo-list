@@ -4,35 +4,35 @@ App.vue
 -->
 <template>
     <div class="center-col">
-        <el-affix offset="0">
-            <el-popconfirm
-            title="是否清除此待办事项列表？"
-            @confirm="() => clearLocalStorage()"
-            :confirmButtonText="'是的'"
-            :cancelButtonText="'取消'">
-                <template #reference>
-                    <el-button type="danger">
-                        <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表（当此待办事项列表异常运作时，也可尝试点击此按钮进行修复）
-                    </el-button>
-                </template>
-            </el-popconfirm>
-        </el-affix>
         <el-affix style="width: 100%;">
-            <el-menu
-            class="center-row"
-            style="min-width: 100%"
-            :default-active="currView"
-            mode="horizontal"
-            @select="handleSelect">
-                <el-menu-item v-for="(viewComponent, viewName) in viewList"
-                :key="viewName"
-                :index="viewName"
-                @click="currView = viewName">
-                    <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
-                    <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
-                    {{ translate[viewName] }}
-                </el-menu-item>
-            </el-menu>
+            <div class="center-col">
+                <el-popconfirm
+                title="是否清除此待办事项列表？"
+                @confirm="() => clearLocalStorage()"
+                :confirmButtonText="'是的'"
+                :cancelButtonText="'取消'">
+                    <template #reference>
+                        <el-button type="danger">
+                            <el-icon><WarnTriangleFilled /></el-icon>&nbsp;清空此待办事项列表（当此待办事项列表异常运作时，也可尝试点击此按钮进行修复）
+                        </el-button>
+                    </template>
+                </el-popconfirm>
+                <el-menu
+                class="center-row"
+                style="min-width: 100%"
+                :default-active="currView"
+                mode="horizontal"
+                @select="handleSelect">
+                    <el-menu-item v-for="(viewComponent, viewName) in viewList"
+                    :key="viewName"
+                    :index="viewName"
+                    @click="currView = viewName">
+                        <el-icon v-if="viewName == 'Statistics'"><Histogram /></el-icon>
+                        <el-icon v-if="viewName == 'TodoList'"><List /></el-icon>
+                        {{ translate[viewName] }}
+                    </el-menu-item>
+                </el-menu>
+            </div>
         </el-affix>
         <component
         :is="viewList[currView]"/>
