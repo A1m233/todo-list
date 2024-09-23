@@ -5,6 +5,7 @@ TodoList.vue
     <div>
         <div>
             <el-menu
+            style="display: flex; justify-content: center; "
             :ellipsis="false"
             :default-active="filtered"
             mode="horizontal"
@@ -28,7 +29,7 @@ TodoList.vue
                 <el-form-item>
                     <el-input
                     v-model="newTodo"
-                    style="width: 240px;"
+                    style="width: 420px;"
                     required placeholder="新的待办事项"
                     clearable />
                 </el-form-item>
