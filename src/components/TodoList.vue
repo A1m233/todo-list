@@ -45,7 +45,7 @@ TodoList.vue
         </div>
         <div>
             <VueDraggable v-model="todos" :disabled="filtered !== 'all'">
-                <div v-for="(todo, index) in filteredTodos" :key="index">
+                <div v-for="(todo, index) in filteredTodos" :key="todo.id">
                     <component
                     :is="Todo"
                     @update-state="newState => updateState(todo.value.id, newState)"
